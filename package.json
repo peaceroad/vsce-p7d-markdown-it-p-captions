@@ -2,7 +2,7 @@
   "name": "p7d-markdown-it-p-captions",
   "displayName": "p7d-markdown-it-p-captions",
   "description": "adds p[class|=caption] in markdown preview html.",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "publisher": "peaceroad",
   "license": "MIT",
   "repository": {
