@@ -23,13 +23,13 @@ The relationship between the character string at the beginning of the paragraph 
 | class attribute value | Character string at the beginning of a paragraph (uppercase or lowercase) |
 | ---- | ---- |
 | `caption-img` | fig, figure, illust, photo, 図, イラスト, 写真 |
-| `caption-video` | movie, video, 動画 |
+| `caption-video` | movie, video, 動画, ビデオ |
 | `caption-table` | table, 表 |
 | `caption-pre-code` | code, codeblock, program, コード, ソースコード, プログラム |
-| `caption-pre-samp` | terminal, prompt, ターミナル, プロンプト |
+| `caption-pre-samp` | terminal, prompt, command, ターミナル, プロンプト, コマンド |
 | `caption-example` | example, 例 |
 
-In addition, a delimiter is required after these strings.
+In addition, a delimiter is required after these strings.  If the character string is Japanese, half-width spaces are allowed.
 
 ```md
 Fig. Caption
@@ -43,12 +43,62 @@ Fig: Caption
 図：キャプション
 
 図　キャプション
+
+図 キャプション
 ```
 
-Exceptionally, if the serial number continues, it will work without this delimiter.
+Exceptionally, if the serial number continues, it will work without this delimiter. However, the next character must be uppercase.
 
 ```md
 Fig 1.1 Caption.
 
 図1.1 Caption.
+```
+
+Example: 
+
+```js
+  [
+    'Figure. A cat.',
+    '<p class="caption-img">Figure. A cat.</p>\n'
+  ], [
+    'Figure is a cat.',
+    '<p>Figure is a cat.</p>\n'
+  ], [
+    'Figure 1. A cat.',
+    '<p class="caption-img">Figure 1. A cat.</p>\n'
+  ], [
+    'Figure 1 is a cat.',
+    '<p>Figure 1 is a cat.</p>\n'
+  ], [
+    'Figure A is a cat.',
+    '<p>Figure A is a cat.</p>\n'
+  ], [
+    'Figure A A cat.',
+    '<p class="caption-img">Figure A A cat.</p>\n'
+  ], [
+    'Figure 1 A cat.',
+    '<p class="caption-img">Figure 1 A cat.</p>\n'
+  ], [
+    'Figure 1 a cat.',
+    '<p>Figure 1 a cat.</p>\n'
+  ], [
+    '図　猫',
+    '<p class="caption-img">図　猫</p>\n'
+  ], [
+    '図 猫',
+    '<p class="caption-img">図 猫</p>\n'
+  ], [
+    '図1　猫',
+    '<p class="caption-img">図1　猫</p>\n'
+  ], [
+    '図1.1 猫',
+    '<p class="caption-img">図1.1 猫</p>\n'
+  ], [
+    '図は猫',
+    '<p>図は猫</p>\n'
+  ] , [
+    '図1は猫',
+    '<p>図1は猫</p>\n'
+  ]
 ```
