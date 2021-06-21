@@ -10,7 +10,7 @@ Illust 1. A caption.
 ![](illust1.jpg)
 ```
 
-In VS Code's built-in markdown preview, the value of the class attribute is added as follows. 
+In VS Code's built-in markdown preview, the value of the class attribute is added as follows.
 
 ```html
 <p class="caption-img">Illust 1. A caption.</p>
@@ -55,7 +55,7 @@ Fig 1.1 Caption.
 図1.1 Caption.
 ```
 
-Example: 
+Example:
 
 ```js
   [
@@ -68,10 +68,7 @@ Example:
     'Figure.',
     '<p class="caption-img">Figure.</p>\n'
   ], [
-      'Figure.',
-      '<p class="caption-img">Figure.</p>\n'
-  ], [
-      'Figure 1',
+    'Figure 1',
     '<p class="caption-img">Figure 1</p>\n'
   ], [
     'Figure A.1',
@@ -88,9 +85,6 @@ Example:
   ], [
     'Figure 1 is a cat.',
     '<p>Figure 1 is a cat.</p>\n'
-  ], [
-    'Figure A is a cat.',
-    '<p>Figure A is a cat.</p>\n'
   ], [
     'Figure A A cat.',
     '<p class="caption-img">Figure A A cat.</p>\n'
