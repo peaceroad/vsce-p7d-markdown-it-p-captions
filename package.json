@@ -2,7 +2,7 @@
   "name": "p7d-markdown-it-p-captions",
   "displayName": "p7d-markdown-it-p-captions",
   "description": "adds p[class|=caption] in markdown preview html.",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "publisher": "peaceroad",
   "license": "MIT",
   "repository": {
@@ -22,10 +22,24 @@
   },
   "activationEvents": [],
   "contributes": {
-    "markdown.markdownItPlugins": true
+    "markdown.markdownItPlugins": true,
+    "markdown.previewStyles": [
+      "./style/p-captions.css"
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "p7d-markdown-it-p-captions",
+      "properties": {
+        "p7dMarkdownItPCaptions.disableStyle": {
+          "type": "boolean",
+          "default": false,
+          "description": "Disable the default CSS of p7d-markdown-it-p-captions."
+        }
+      }
+    }
   },
   "main": "./extension.js",
   "dependencies": {
-    "p7d-markdown-it-p-captions": "^0.2.5"
+    "p7d-markdown-it-p-captions": "^0.3.1"
   }
 }

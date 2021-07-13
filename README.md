@@ -5,18 +5,23 @@ For a paragraph, it determines if it is a caption from the string at the beginni
 You write the following Markdown.
 
 ```md
-Illust 1. A caption.
+Figure 1. A caption.
 
-![](illust1.jpg)
+![](fig1.jpg)
 ```
 
 In VS Code's built-in markdown preview, the value of the class attribute is added as follows.
 
 ```html
-<p class="caption-img">Illust 1. A caption.</p>
-<p><img alt="" src="illust1.jpg"></p>
+<p class="caption-img"><span class="caption-img-label">Figure 1<span class="caption-img-label-joint">.</span></span> A caption.</p>
+<p><img alt="" src="fig1.jpg"></p>
 ```
 
+Figure. Visual Studio Code with this extension installed.
+
+![Figure](docs/vscode.png)
+
+## Rule
 
 The relationship between the character string at the beginning of the paragraph to be determined and the value of the class attribute is as follows.
 
@@ -55,6 +60,12 @@ Fig 1.1 Caption.
 図1.1 Caption.
 ```
 
+---
+
+Notice. You can remove the CSS that this extension applies by checking "P7d Markdown It PCaptions: Disable Style" of the user settings.
+
+---
+
 Example:
 
 ```js
@@ -66,34 +77,43 @@ Example:
     '<p>Figure</p>\n'
   ], [
     'Figure.',
-    '<p class="caption-img">Figure.</p>\n'
+    '<p class="caption-img"><span class="caption-img-label">Figure<span class="caption-img-label-joint">.</span></span></p>\n'
+  ], [
+    'Figure:',
+    '<p class="caption-img"><span class="caption-img-label">Figure<span class="caption-img-label-joint">:</span></span></p>\n'
   ], [
     'Figure 1',
-    '<p class="caption-img">Figure 1</p>\n'
+    '<p class="caption-img"><span class="caption-img-label">Figure 1</span></p>\n'
   ], [
     'Figure A.1',
-    '<p class="caption-img">Figure A.1</p>\n'
+    '<p class="caption-img"><span class="caption-img-label">Figure A.1</span></p>\n'
   ], [
     'Figure. A cat.',
-    '<p class="caption-img">Figure. A cat.</p>\n'
+    '<p class="caption-img"><span class="caption-img-label">Figure<span class="caption-img-label-joint">.</span></span> A cat.</p>\n'
+  ], [
+    'Figure: A cat.',
+    '<p class="caption-img"><span class="caption-img-label">Figure<span class="caption-img-label-joint">:</span></span> A cat.</p>\n'
   ], [
     'Figure is a cat.',
     '<p>Figure is a cat.</p>\n'
   ], [
     'Figure 1. A cat.',
-    '<p class="caption-img">Figure 1. A cat.</p>\n'
+    '<p class="caption-img"><span class="caption-img-label">Figure 1<span class="caption-img-label-joint">.</span></span> A cat.</p>\n'
   ], [
     'Figure 1 is a cat.',
     '<p>Figure 1 is a cat.</p>\n'
   ], [
     'Figure A A cat.',
-    '<p class="caption-img">Figure A A cat.</p>\n'
+    '<p class="caption-img"><span class="caption-img-label">Figure A</span> A cat.</p>\n'
   ], [
     'Figure 1 A cat.',
-    '<p class="caption-img">Figure 1 A cat.</p>\n'
+    '<p class="caption-img"><span class="caption-img-label">Figure 1</span> A cat.</p>\n'
   ], [
     'Figure 1 a cat.',
     '<p>Figure 1 a cat.</p>\n'
+  ], [
+    'Figure 1: A cat.',
+    '<p class="caption-img"><span class="caption-img-label">Figure 1<span class="caption-img-label-joint">:</span></span> A cat.</p>\n'
   ], [
     '図',
     '<p>図</p>\n'
@@ -102,22 +122,22 @@ Example:
     '<p>図</p>\n'
   ], [
     '図.',
-    '<p class="caption-img">図.</p>\n'
+    '<p class="caption-img"><span class="caption-img-label">図<span class="caption-img-label-joint">.</span></span></p>\n'
   ], [
     '図1',
-    '<p class="caption-img">図1</p>\n'
+    '<p class="caption-img"><span class="caption-img-label">図1</span></p>\n'
   ], [
     '図1.1',
-    '<p class="caption-img">図1.1</p>\n'
+    '<p class="caption-img"><span class="caption-img-label">図1.1</span></p>\n'
   ], [
     '図 猫',
-    '<p class="caption-img">図 猫</p>\n'
+    '<p class="caption-img"><span class="caption-img-label">図</span> 猫</p>\n'
   ], [
     '図1　猫',
-    '<p class="caption-img">図1　猫</p>\n'
+    '<p class="caption-img"><span class="caption-img-label">図1<span class="caption-img-label-joint">　</span></span>猫</p>\n'
   ], [
     '図1.1 猫',
-    '<p class="caption-img">図1.1 猫</p>\n'
+    '<p class="caption-img"><span class="caption-img-label">図1.1</span> 猫</p>\n'
   ], [
     '図は猫',
     '<p>図は猫</p>\n'
@@ -128,4 +148,6 @@ Example:
     '図1.1は猫',
     '<p>図1.1は猫</p>\n'
   ]
+
 ```
+

@@ -1,0 +1,24 @@
+@charset "UTF-8";
+.vscode-body p[class|="caption"] {
+  font-size: 0.9em;
+  line-height: 1.55;
+  text-indent: 0;
+  margin: 1.5em auto 0.5em;
+  display: table;
+}
+.vscode-body p > img:is([alt^="図"], [alt^="イラスト"], [alt^="写真"], [alt^="fig" i], [alt^="illust" i], [alt^="photo" i]) {
+  display: block;
+  margin: 1.5em auto;
+  max-height: auto;
+}
+.vscode-body p[class|="caption"] + p > img:is([alt^="図"], [alt^="イラスト"], [alt^="写真"], [alt^="fig" i], [alt^="illust" i], [alt^="photo" i]) {
+  margin-block-start: 0;
+  max-height: auto;
+}
+.vscode-body :is(video, table, pre, .example) {
+  display: block;
+  margin: 1.5em auto;
+}
+.vscode-body p[class|="caption"] + :is(video, pre, table, .example) {
+  margin-block-start: 0;
+}
