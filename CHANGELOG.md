@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.3.1, 0.3.1 - 2021/07/13
+
+- Add span element for caption's label.
+- Add simple CSS for captions.
+
 ## 0.2.2 - 2021/06/21
 
 - Improved processing
