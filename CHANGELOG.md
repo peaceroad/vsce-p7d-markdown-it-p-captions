@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.3.2 - 2021/08/04
+
+- Not recommended. Use [another plugin](https://marketplace.visualstudio.com/items?itemName=peaceroad.p7d-markdown-it-figure-with-p-caption).
+
 ## 0.3.1, 0.3.1 - 2021/07/13
 
 - Add span element for caption's label.

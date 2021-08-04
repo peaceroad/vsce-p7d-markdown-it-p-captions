@@ -1,5 +1,11 @@
 # vsce-p7d-markdown-it-p-captions
 
+---
+
+**Notice.** You should use [another plugin](https://marketplace.visualstudio.com/items?itemName=peaceroad.p7d-markdown-it-figure-with-p-caption) instead of this plugin.
+
+---
+
 For a paragraph, it determines if it is a caption from the string at the beginning of the paragraph and adds a class attribute value to indicate that it is a caption.
 
 You write the following Markdown.
@@ -25,21 +31,22 @@ Figure. Visual Studio Code with this extension installed.
 
 The relationship between the character string at the beginning of the paragraph to be determined and the value of the class attribute is as follows.
 
+
 | class attribute value | Character string at the beginning of a paragraph (uppercase or lowercase) |
 | ---- | ---- |
 | `caption-img` | fig, figure, illust, photo, 図, イラスト, 写真 |
 | `caption-video` | movie, video, 動画, ビデオ |
 | `caption-table` | table, 表 |
-| `caption-pre-code` | code, codeblock, program, コード, ソースコード, プログラム |
-| `caption-pre-samp` | terminal, prompt, command, ターミナル, プロンプト, コマンド |
+| `caption-pre-code` | code, codeblock, program, algorithm, コード, ソースコード, 命令, プログラム, 算譜, アルゴリズム, 算法 |
+| `caption-pre-samp` | console, terminal, prompt, command, 端末, ターミナル, コマンド, コマンドプロンプト, プロンプト |
 | `caption-example` | example, 例 |
 
-In addition, a delimiter is required after these strings.  If the character string is Japanese, half-width spaces are allowed.
+In addition, a delimiter is required after these strings, and then one space is needed. If the character string is Japanese, half-width spaces only are allowed.
 
 ```md
-Fig. Caption
+Fig. A caption
 
-Fig: Caption
+Fig: A caption
 
 図．キャプション
 
@@ -52,12 +59,32 @@ Fig: Caption
 図 キャプション
 ```
 
-Exceptionally, if the serial number continues, it will work without this delimiter. However, the next character must be uppercase.
+You can also put a serial number, such as 0-9A-Z.-, between the first term and the separator.
 
 ```md
-Fig 1.1 Caption.
+Fig 1. A caption
 
-図1.1 Caption.
+Fig 1.1. A caption
+
+Fig A: A caption
+
+図1.1：キャプション
+```
+
+Only when it has this serial number, it can be identified by omitting the separator and adding only a space. In English, the caption written after a space must begin with an uppercase letter.
+
+```md
+Fig 1 A caption.
+
+Fig 1.1 A caption.
+
+Figure A A caption
+```
+
+Also, It identifies the `Figure.1` type. This format has a dot immediately after the first term, a serial number and a space after it. In this case, too, the caption written after a space must begin with an uppercase letter.
+
+```md
+Figure.1 A caption.
 ```
 
 ---

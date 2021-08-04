@@ -2,7 +2,7 @@
   "name": "p7d-markdown-it-p-captions",
   "displayName": "p7d-markdown-it-p-captions",
   "description": "adds p[class|=caption] in markdown preview html.",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "publisher": "peaceroad",
   "license": "MIT",
   "repository": {
@@ -17,7 +17,7 @@
   "capabilities": {
     "virtualWorkspaces": true,
     "untrustedWorkspaces": {
-        "supported": true
+      "supported": true
     }
   },
   "activationEvents": [],
@@ -40,6 +40,6 @@
   },
   "main": "./extension.js",
   "dependencies": {
-    "p7d-markdown-it-p-captions": "^0.3.1"
+    "p7d-markdown-it-p-captions": "^0.4.6"
   }
 }
