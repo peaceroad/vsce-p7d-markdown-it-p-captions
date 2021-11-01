@@ -2,7 +2,7 @@
   "name": "p7d-markdown-it-p-captions",
   "displayName": "p7d-markdown-it-p-captions",
   "description": "adds p[class|=caption] in markdown preview html.",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "publisher": "peaceroad",
   "license": "MIT",
   "repository": {
@@ -24,7 +24,8 @@
   "contributes": {
     "markdown.markdownItPlugins": true,
     "markdown.previewStyles": [
-      "./style/p-captions.css"
+      "./style/p-captions.css",
+      "./style/p-captions-just-below-figure.css"
     ],
     "configuration": {
       "type": "object",
@@ -33,13 +34,18 @@
         "p7dMarkdownItPCaptions.disableStyle": {
           "type": "boolean",
           "default": false,
-          "description": "Disable the default CSS of p7d-markdown-it-p-captions."
+          "description": "Disable CSS of p7d-markdown-it-p-captions."
+        },
+        "p7dMarkdownItPCaptions.figureCaptionHasAlwaysBelow": {
+          "type": "boolean",
+          "default": false,
+          "description": "If the caption in the figure or illust or photo has always below, apply another CSS to adjust margin."
         }
       }
     }
   },
   "main": "./extension.js",
   "dependencies": {
-    "p7d-markdown-it-p-captions": "^0.4.6"
+    "p7d-markdown-it-p-captions": "^0.5.0"
   }
 }

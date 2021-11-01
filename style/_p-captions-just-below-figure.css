@@ -13,14 +13,13 @@
   display: block;
   margin: 1.5em auto;
 }
+.vscode-body p.caption-img {
+  margin: -1.11em auto 1.67em;
+}
+/*
 .vscode-body p.caption-img + p > img:is([alt^="図"], [alt^="イラスト"], [alt^="写真"], [alt^="fig" i], [alt^="illust" i], [alt^="photo" i]) {
   margin: -1em auto 1.5em;
-}
-/* The browser does not support has() yet. */
-/* So it provides an option to use another CSS. In that case, the author would have to place the caption at the bottom of the figure. */
-/*
-.vscode-body p:has(> img:is([alt^="図"], [alt^="イラスト"], [alt^="写真"], [alt^="fig" i], [alt^="illust" i], [alt^="photo" i])) + p.caption-img {
-  margin: -1.11em auto 1.67em;
+  max-height: auto;
 }
 */
 .vscode-body :is(video, table, pre, blockquote) {
@@ -38,3 +37,4 @@
 .vscode-body blockquote + p.caption-blockquote {
   text-align: end;
 }
+

@@ -2,7 +2,7 @@
 
 ---
 
-**Notice.** You should use [another plugin](https://marketplace.visualstudio.com/items?itemName=peaceroad.p7d-markdown-it-figure-with-p-caption) instead of this plugin.
+**Notice.** You may use [another plugin](https://marketplace.visualstudio.com/items?itemName=peaceroad.p7d-markdown-it-figure-with-p-caption) instead of this plugin.
 
 ---
 
@@ -39,7 +39,7 @@ The relationship between the character string at the beginning of the paragraph 
 | `caption-table` | table, 表 |
 | `caption-pre-code` | code, codeblock, program, algorithm, コード, ソースコード, 命令, プログラム, 算譜, アルゴリズム, 算法 |
 | `caption-pre-samp` | console, terminal, prompt, command, 端末, ターミナル, コマンド, コマンドプロンプト, プロンプト |
-| `caption-example` | example, 例 |
+| `caption-blockquote` | quote, blockquote, 引用, 引用元, 出典 |
 
 In addition, a delimiter is required after these strings, and then one space is needed. If the character string is Japanese, half-width spaces only are allowed.
 

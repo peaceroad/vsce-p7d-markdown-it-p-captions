@@ -3,31 +3,60 @@
 const captions = require('p7d-markdown-it-p-captions');
 
 const workspace = require('vscode').workspace;
+const window = require('vscode').window;
 const path = require('path');
 const fs = require('fs');
 
-const cssFile = 'p-captions.css';
-const cssFilePath = __dirname + '/style/' + cssFile;
-const savedCssFilePath = __dirname + '/style/_' + cssFile;
-
-function createSavedCssFile () {
-  if (!fs.existsSync(savedCssFilePath)) {
-    fs.writeFileSync(savedCssFilePath, fs.readFileSync(cssFilePath));
-   }
-}
-
+const cssDirectory = __dirname + path.sep + 'style' + path.sep;
+const appliedCssFile = cssDirectory + 'p-captions.css';
+const appliedCssAnotherFile = cssDirectory + 'p-captions-just-below-figure.css';
+const cachedCssFile = cssDirectory + '_p-captions.css';
+const cachedCssAnotherFile = cssDirectory + '_p-captions-just-below-figure.css';
 async function activate() {
 
-  workspace.onDidChangeConfiguration(event => {
-    if (event.affectsConfiguration('p7dMarkdownItPCaptions')) {
-      if (workspace.getConfiguration('p7dMarkdownItPCaptions').get('disableStyle')) {
-        createSavedCssFile();
-        fs.writeFileSync(cssFilePath, '');
+   workspace.onDidChangeConfiguration(event => {
+    if (event.affectsConfiguration('p7dMarkdownItPCaptions.disableStyle')) {
+      let disableStyle = workspace.getConfiguration('p7dMarkdownItPCaptions').get('disableStyle');
+      if(disableStyle === undefined) {disableStyle = false;}
+      let figureCaptionHasAlwaysBelow = workspace.getConfiguration('p7dMarkdownItPCaptions').get('figureCaptionHasAlwaysBelow');
+      if(figureCaptionHasAlwaysBelow === undefined) {figureCaptionHasAlwaysBelow = false;}
+
+      //window.showInformationMessage('disableStyle:: ' + disableStyle + ', figureCaptionHasAlwaysBelow: ' + figureCaptionHasAlwaysBelow);
+
+      if (disableStyle) {
+        fs.writeFileSync(appliedCssFile, '');
+        fs.writeFileSync(appliedCssAnotherFile, '');
+
       } else {
-        createSavedCssFile();
-        fs.writeFileSync(cssFilePath, fs.readFileSync(savedCssFilePath));
+        if (figureCaptionHasAlwaysBelow) {
+          fs.writeFileSync(appliedCssAnotherFile, fs.readFileSync(cachedCssAnotherFile, 'utf8').toString());
+          fs.writeFileSync(appliedCssFile, '');
+        } else {
+          fs.writeFileSync(appliedCssFile, fs.readFileSync(cachedCssFile, 'utf8').toString());
+          fs.writeFileSync(appliedCssAnotherFile, '');
+        }
       }
     }
+
+    if (event.affectsConfiguration('p7dMarkdownItPCaptions.figureCaptionHasAlwaysBelow')) {
+      let disableStyle = workspace.getConfiguration('p7dMarkdownItPCaptions').get('disableStyle');
+      if(disableStyle === undefined) {disableStyle = false;}
+      let figureCaptionHasAlwaysBelow = workspace.getConfiguration('p7dMarkdownItPCaptions').get('figureCaptionHasAlwaysBelow');
+      if(figureCaptionHasAlwaysBelow === undefined) {figureCaptionHasAlwaysBelow = false;}
+
+      //window.showInformationMessage('disableStyle: ' + disableStyle + ', figureCaptionHasAlwaysBelow:: ' + figureCaptionHasAlwaysBelow);
+
+      if (!disableStyle) {
+        if (figureCaptionHasAlwaysBelow) {
+          fs.writeFileSync(appliedCssAnotherFile, fs.readFileSync(cachedCssAnotherFile, 'utf8').toString());
+          fs.writeFileSync(appliedCssFile, '');
+        } else {
+          fs.writeFileSync(appliedCssFile, fs.readFileSync(cachedCssFile, 'utf8').toString());
+          fs.writeFileSync(appliedCssAnotherFile, '');
+        }
+      }
+    }
+
   });
 
   return {

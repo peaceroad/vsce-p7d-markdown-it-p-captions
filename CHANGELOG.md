@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.4.0 2021/11/01
+
+- Delete `caption-example`.
+- Add `caption-blockquote` for blockquote caption.
+- Adjust CSS  a bit.
+- Add option: `p7dMarkdownItPCaptions.figureCaptionHasAlwaysBelow`. If the caption in the figure or illust or photo has always below, apply another CSS to adjust margin.
+
 ## 0.3.2 - 2021/08/04
 
 - Not recommended. Use [another plugin](https://marketplace.visualstudio.com/items?itemName=peaceroad.p7d-markdown-it-figure-with-p-caption).
