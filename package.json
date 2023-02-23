@@ -2,7 +2,7 @@
   "name": "p7d-markdown-it-p-captions",
   "displayName": "p7d-markdown-it-p-captions",
   "description": "adds p[class|=caption] in markdown preview html.",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "publisher": "peaceroad",
   "license": "MIT",
   "repository": {
@@ -24,8 +24,7 @@
   "contributes": {
     "markdown.markdownItPlugins": true,
     "markdown.previewStyles": [
-      "./style/p-captions.css",
-      "./style/p-captions-just-below-figure.css"
+      "./style/p-captions.css"
     ],
     "configuration": {
       "type": "object",
@@ -36,16 +35,31 @@
           "default": false,
           "description": "Disable CSS of p7d-markdown-it-p-captions."
         },
-        "p7dMarkdownItPCaptions.figureCaptionHasAlwaysBelow": {
+        "p7dMarkdownItPCaptions.displayUnnumberedLabel": {
           "type": "boolean",
           "default": false,
-          "description": "If the caption in the figure or illust or photo has always below, apply another CSS to adjust margin."
+          "description": "Display caption's unnumbered label."
+        },
+        "p7dMarkdownItPCaptions.setDoubleQuoteFileName": {
+          "type": "boolean",
+          "default": false,
+          "description": "Set Filename: Caption. \"Filename\" A text."
+        },
+        "p7dMarkdownItPCaptions.setDoubleAsteriskFileName": {
+          "type": "boolean",
+          "default": false,
+          "description": "Set Filename: Caption. **Filename** A text."
+        },
+        "p7dMarkdownItPCaptions.notConvertLabelJointFullWidthSpace": {
+          "type": "boolean",
+          "default": false,
+          "description": "Not convert full-width space of label joint display to half-width space."
         }
       }
     }
   },
   "main": "./extension.js",
   "dependencies": {
-    "p7d-markdown-it-p-captions": "^0.5.0"
+    "p7d-markdown-it-p-captions": "^0.9.0"
   }
 }

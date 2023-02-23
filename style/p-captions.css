@@ -1,36 +1,42 @@
 @charset "UTF-8";
 .vscode-body p[class|="caption"] {
-  font-size: 0.9em;
+  font-size: 0.925em;
   line-height: 1.55;
   text-indent: 0;
-  margin: 1.67em auto;
-  display: table;
+  margin: 2em auto;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+}
+.vscode-body p[class|="caption"] > span[class$="label"] {
+  margin-inline-end: 0.25em;
+}
+.vscode-body :is(p:has(> img:only-child), video, table, pre, blockquote) {
+  margin-block: 2em;
+}
+/*
+.vscode-body :is(video, table, pre, blockquote):has(+ p[class|="caption"]) {
+  margin-block: 2em;
+}
+*/
+.vscode-body p:has(> img:only-child) {
+  text-align: center;
+}
+.vscode-body :is(video, table, pre, blockquote) {
+  margin-inline: auto;
+}
+.vscode-body p[class|="caption"] + :is(p:has(> img:only-child), video, table, pre, blockquote) {
+  margin-block-start: -1.25em;
+  margin-block-end: 2em;
+}
+.vscode-body :is(p:has(> img:only-child), video, table, pre, blockquote) + p[class|="caption"] {
+  margin-block-start: -1.25em;
+  margin-block-end: 2em;
+}
+.vscode-body p[class|="caption"] + :is(p:has(> img:only-child), video, table, pre, blockquote) + p[class|="caption"] {
+  margin-block-start: 2em;
 }
 .vscode-body p.caption-blockquote {
   inline-size: 100%;
-}
-.vscode-body p > img:is([alt^="図"], [alt^="イラスト"], [alt^="写真"], [alt^="fig" i], [alt^="illust" i], [alt^="photo" i]) {
-  display: block;
-  margin: 1.5em auto;
-}
-.vscode-body p.caption-img + p > img:is([alt^="図"], [alt^="イラスト"], [alt^="写真"], [alt^="fig" i], [alt^="illust" i], [alt^="photo" i]) {
-  margin: -1em auto 1.5em;
-}
-/* The browser does not support has() yet. */
-/* So it provides an option to use another CSS. In that case, the author would have to place the caption at the bottom of the figure. */
-/*
-.vscode-body p:has(> img:is([alt^="図"], [alt^="イラスト"], [alt^="写真"], [alt^="fig" i], [alt^="illust" i], [alt^="photo" i])) + p.caption-img {
-  margin: -1.11em auto 1.67em;
-}
-*/
-.vscode-body :is(video, table, pre, blockquote) {
-  margin: 1.5em auto;
-}
-.vscode-body p[class|="caption"] + :is(video, pre, table, blockquote) {
-  margin: -1em auto 1.5em;
-}
-.vscode-body :is(video, pre, table, blockquote) + p[class|="caption"] {
-  margin: -1.11em auto 1.67em;
 }
 .vscode-body p.caption-blockquote + blockquote {
   text-align: start;

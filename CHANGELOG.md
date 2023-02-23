@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.5.0 2023/02/23
+
+Warning. This version may be different in usability than in the past use.
+
+- By default, if the label that specifies the caption is not numbered, remove the label itself on output (preview).
+    -  Markdown `Figure. A caption.` converted to HTML `<p>A caption.</p>`.
+    - You can get the same output by changing the settings.
+- by default, full-width spaces used as label joints are converted to half-width spaces on output(preview).
+     - You can get the same output by changing the settings.
+- Significantly rewritten simple CSS.
+    - Because of the use of has(), it will look different in the preview and when outputting to HTML and viewed in a browser. It seems that vscode's Markdown viewer doesn't support has() yet.
+
+Note. 100
+
 ## 0.4.0 2021/11/01
 
 - Delete `caption-example`.

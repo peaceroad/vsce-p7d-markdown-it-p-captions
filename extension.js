@@ -1,67 +1,68 @@
 'use strict';
 
 const captions = require('p7d-markdown-it-p-captions');
-
+const commands = require('vscode').commands;
 const workspace = require('vscode').workspace;
-const window = require('vscode').window;
+const config = workspace.getConfiguration('p7dMarkdownItPCaptions');
 const path = require('path');
 const fs = require('fs');
 
 const cssDirectory = __dirname + path.sep + 'style' + path.sep;
 const appliedCssFile = cssDirectory + 'p-captions.css';
-const appliedCssAnotherFile = cssDirectory + 'p-captions-just-below-figure.css';
 const cachedCssFile = cssDirectory + '_p-captions.css';
-const cachedCssAnotherFile = cssDirectory + '_p-captions-just-below-figure.css';
+
 async function activate() {
 
-   workspace.onDidChangeConfiguration(event => {
-    if (event.affectsConfiguration('p7dMarkdownItPCaptions.disableStyle')) {
-      let disableStyle = workspace.getConfiguration('p7dMarkdownItPCaptions').get('disableStyle');
-      if(disableStyle === undefined) {disableStyle = false;}
-      let figureCaptionHasAlwaysBelow = workspace.getConfiguration('p7dMarkdownItPCaptions').get('figureCaptionHasAlwaysBelow');
-      if(figureCaptionHasAlwaysBelow === undefined) {figureCaptionHasAlwaysBelow = false;}
+  let exOption = {
+    removeUnnumberedLabel: !config.get('displayUnnumberedLabel'),
+    dquoteFilename: config.get('setDoubleQuoteFileName'),
+    strongFilename: config.get('setDoubleAsteriskFileName'),
+    jointSpaceUseHalfWidth: !config.get('notConvertLabelJointFullWidthSpace'),
+  };
 
-      //window.showInformationMessage('disableStyle:: ' + disableStyle + ', figureCaptionHasAlwaysBelow: ' + figureCaptionHasAlwaysBelow);
+  workspace.onDidChangeConfiguration(event => {
+
+    if (event.affectsConfiguration('p7dMarkdownItPCaptions.displayUnnumberedLabel')) {
+      exOption.removeUnnumberedLabel = !config.get('displayUnnumberedLabel');
+      commands.executeCommand('workbench.action.reloadWindow');
+    }
+    if (event.affectsConfiguration('p7dMarkdownItPCaptions.setDoubleQuoteFileName')) {
+      exOption.dquoteFilename = config.get('setDoubleQuoteFileName');
+      commands.executeCommand('workbench.action.reloadWindow');
+    }
+    if (event.affectsConfiguration('p7dMarkdownItPCaptions.setDoubleAsteriskFileName')) {
+      exOption.strongFilename = config.get('setDoubleAsteriskFileName');
+      commands.executeCommand('workbench.action.reloadWindow');
+    }
+    if (event.affectsConfiguration('p7dMarkdownItPCaptions.notConvertLabelJointFullWidthSpace')) {
+      exOption.jointSpaceUseHalfWidth = !config.get('notConvertLabelJointFullWidthSpace')
+      commands.executeCommand('workbench.action.reloadWindow')
+    }
+
+    if (event.affectsConfiguration('p7dMarkdownItPCaptions.disableStyle')) {
+      let disableStyle = config.get('disableStyle');
+      if(disableStyle === undefined) {disableStyle = false;}
+
+      //window.showInformationMessage('disableStyle:: ' + disableStyle);
 
       if (disableStyle) {
         fs.writeFileSync(appliedCssFile, '');
-        fs.writeFileSync(appliedCssAnotherFile, '');
-
       } else {
-        if (figureCaptionHasAlwaysBelow) {
-          fs.writeFileSync(appliedCssAnotherFile, fs.readFileSync(cachedCssAnotherFile, 'utf8').toString());
-          fs.writeFileSync(appliedCssFile, '');
-        } else {
-          fs.writeFileSync(appliedCssFile, fs.readFileSync(cachedCssFile, 'utf8').toString());
-          fs.writeFileSync(appliedCssAnotherFile, '');
-        }
+        fs.writeFileSync(appliedCssFile, fs.readFileSync(cachedCssFile, 'utf8').toString());
       }
-    }
-
-    if (event.affectsConfiguration('p7dMarkdownItPCaptions.figureCaptionHasAlwaysBelow')) {
-      let disableStyle = workspace.getConfiguration('p7dMarkdownItPCaptions').get('disableStyle');
-      if(disableStyle === undefined) {disableStyle = false;}
-      let figureCaptionHasAlwaysBelow = workspace.getConfiguration('p7dMarkdownItPCaptions').get('figureCaptionHasAlwaysBelow');
-      if(figureCaptionHasAlwaysBelow === undefined) {figureCaptionHasAlwaysBelow = false;}
-
-      //window.showInformationMessage('disableStyle: ' + disableStyle + ', figureCaptionHasAlwaysBelow:: ' + figureCaptionHasAlwaysBelow);
-
-      if (!disableStyle) {
-        if (figureCaptionHasAlwaysBelow) {
-          fs.writeFileSync(appliedCssAnotherFile, fs.readFileSync(cachedCssAnotherFile, 'utf8').toString());
-          fs.writeFileSync(appliedCssFile, '');
-        } else {
-          fs.writeFileSync(appliedCssFile, fs.readFileSync(cachedCssFile, 'utf8').toString());
-          fs.writeFileSync(appliedCssAnotherFile, '');
-        }
-      }
+      commands.executeCommand('workbench.action.reloadWindow')
     }
 
   });
 
   return {
     extendMarkdownIt(md) {
-      return md.use(captions);
+      return md.use(captions, {
+        dquoteFilename: exOption.dquoteFilename,
+        strongFilename: exOption.strongFilename,
+        jointSpaceUseHalfWidth: exOption.jointSpaceUseHalfWidth,
+        removeUnnumberedLabel: exOption.removeUnnumberedLabel,
+      });
     }
   };
 }
