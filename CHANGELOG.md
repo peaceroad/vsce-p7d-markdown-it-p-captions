@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.5.1 2023/04/09
+
+- Add `source` for blockquote caption string.
+
 ## 0.5.0 2023/02/23
 
 Warning. This version may be different in usability than in the past use.

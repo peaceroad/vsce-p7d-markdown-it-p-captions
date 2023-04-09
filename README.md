@@ -63,7 +63,7 @@ Table. The first word that determines the caption line and the class attribute o
 | `caption-table` | table, 表 |
 | `caption-pre-code` | code, codeblock, program, algorithm, コード, ソースコード, リスト, 命令, プログラム, 算譜, アルゴリズム, 算法 |
 | `caption-pre-samp` | console, terminal, prompt, command, 端末, ターミナル, コマンド, コマンドプロンプト, プロンプト |
-| `caption-blockquote` | quote, blockquote, 引用, 引用元, 出典 |
+| `caption-blockquote` | source, quote, blockquote, 引用, 引用元, 出典 |
 
 In addition, a delimiter is required after these strings, and then one space is needed. If the character string is Japanese, half-width spaces only are allowed.
 
