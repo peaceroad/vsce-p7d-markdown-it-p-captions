@@ -1,70 +1,135 @@
-'use strict';
+// @ts-nocheck
 
-const captions = require('p7d-markdown-it-p-captions');
-const commands = require('vscode').commands;
-const workspace = require('vscode').workspace;
-const config = workspace.getConfiguration('p7dMarkdownItPCaptions');
-const path = require('path');
-const fs = require('fs');
+import captions from 'p7d-markdown-it-p-captions';
+import * as vscode from 'vscode';
+import path from 'path';
+import fs from 'fs';
 
-const cssDirectory = __dirname + path.sep + 'style' + path.sep;
-const appliedCssFile = cssDirectory + 'p-captions.css';
-const cachedCssFile = cssDirectory + '_p-captions.css';
+const commands = vscode.commands;
+const workspace = vscode.workspace;
 
-async function activate() {
+const CONFIG_SECTION = 'p7dMarkdownItPCaptions';
+const getExtensionConfig = () => workspace.getConfiguration(CONFIG_SECTION);
 
-  let exOption = {
-    removeUnnumberedLabel: !config.get('displayUnnumberedLabel'),
-    dquoteFilename: config.get('setDoubleQuoteFileName'),
-    strongFilename: config.get('setDoubleAsteriskFileName'),
-    jointSpaceUseHalfWidth: !config.get('notConvertLabelJointFullWidthSpace'),
+const DEFAULT_CLASS_PREFIX = 'caption';
+const DEFAULT_REMOVE_UNNUMBERED_LABEL_EXCEPT_MARKS = ['blockquote'];
+const REMOVE_BLOCKQUOTE_TOKENS = new Set(['no-blockquote', 'unblockquote']);
+
+const parseCommaSeparated = (value) => {
+  if (typeof value !== 'string') return [];
+  const trimmed = value.trim();
+  if (!trimmed) return [];
+  return trimmed
+    .split(',')
+    .map(entry => entry.trim())
+    .filter(Boolean);
+};
+
+const parseLabelPrefixMarker = (value) => {
+  const entries = parseCommaSeparated(value);
+  if (!entries.length) return null;
+  return entries.length === 1 ? entries[0] : entries.slice(0, 2);
+};
+
+const parseRemoveUnnumberedLabelExceptMarks = (value) => {
+  const entries = parseCommaSeparated(value);
+  if (!entries.length) return DEFAULT_REMOVE_UNNUMBERED_LABEL_EXCEPT_MARKS.slice();
+  const result = new Set(DEFAULT_REMOVE_UNNUMBERED_LABEL_EXCEPT_MARKS);
+  for (const entry of entries) {
+    if (REMOVE_BLOCKQUOTE_TOKENS.has(entry.toLowerCase())) {
+      result.delete('blockquote');
+      continue;
+    }
+    result.add(entry);
+  }
+  return Array.from(result);
+};
+
+const buildCaptionOptions = () => {
+  const config = getExtensionConfig();
+  const displayUnnumberedLabel = config.get('displayUnnumberedLabel', false);
+  const notConvertLabelJointFullWidthSpace = config.get('notConvertLabelJointFullWidthSpace', false);
+  const classPrefixValue = config.get('classPrefix', '');
+  const classPrefix = typeof classPrefixValue === 'string' ? classPrefixValue.trim() : '';
+  const removeUnnumberedLabelExceptMarks = parseRemoveUnnumberedLabelExceptMarks(
+    config.get('removeUnnumberedLabelExceptMarks', '')
+  );
+
+  return {
+    classPrefix: classPrefix || DEFAULT_CLASS_PREFIX,
+    dquoteFilename: config.get('setDoubleQuoteFileName', false),
+    strongFilename: config.get('setDoubleAsteriskFileName', false),
+    hasNumClass: config.get('hasNumClass', false),
+    bLabel: config.get('bLabel', false),
+    strongLabel: config.get('strongLabel', false),
+    labelPrefixMarker: parseLabelPrefixMarker(config.get('labelPrefixMarker', '')),
+    jointSpaceUseHalfWidth: !notConvertLabelJointFullWidthSpace,
+    removeUnnumberedLabel: !displayUnnumberedLabel,
+    removeUnnumberedLabelExceptMarks,
+    removeMarkNameInCaptionClass: config.get('removeMarkNameInCaptionClass', false),
+    wrapCaptionBody: config.get('wrapCaptionBody', false),
+    setFigureNumber: config.get('setFigureNumber', false),
   };
+};
 
-  workspace.onDidChangeConfiguration(event => {
+const readFileIfExists = (filePath) => {
+  try {
+    return fs.readFileSync(filePath, 'utf8').toString();
+  } catch {
+    return null;
+  }
+};
 
-    if (event.affectsConfiguration('p7dMarkdownItPCaptions.displayUnnumberedLabel')) {
-      exOption.removeUnnumberedLabel = !config.get('displayUnnumberedLabel');
-      commands.executeCommand('workbench.action.reloadWindow');
+const applyStyleSetting = (disableStyle, cssDirectory, appliedCssFile, cachedCssFile) => {
+  if (!fs.existsSync(cssDirectory)) {
+    return;
+  }
+  if (disableStyle) {
+    const currentCss = readFileIfExists(appliedCssFile);
+    if (currentCss !== '') {
+      fs.writeFileSync(appliedCssFile, '');
     }
-    if (event.affectsConfiguration('p7dMarkdownItPCaptions.setDoubleQuoteFileName')) {
-      exOption.dquoteFilename = config.get('setDoubleQuoteFileName');
-      commands.executeCommand('workbench.action.reloadWindow');
-    }
-    if (event.affectsConfiguration('p7dMarkdownItPCaptions.setDoubleAsteriskFileName')) {
-      exOption.strongFilename = config.get('setDoubleAsteriskFileName');
-      commands.executeCommand('workbench.action.reloadWindow');
-    }
-    if (event.affectsConfiguration('p7dMarkdownItPCaptions.notConvertLabelJointFullWidthSpace')) {
-      exOption.jointSpaceUseHalfWidth = !config.get('notConvertLabelJointFullWidthSpace')
-      commands.executeCommand('workbench.action.reloadWindow')
-    }
+    return;
+  }
+  const cachedCss = readFileIfExists(cachedCssFile);
+  if (cachedCss === null) {
+    return;
+  }
+  const appliedCss = readFileIfExists(appliedCssFile);
+  if (appliedCss !== cachedCss) {
+    fs.writeFileSync(appliedCssFile, cachedCss);
+  }
+};
 
-    if (event.affectsConfiguration('p7dMarkdownItPCaptions.disableStyle')) {
-      let disableStyle = config.get('disableStyle');
-      if(disableStyle === undefined) {disableStyle = false;}
+export function activate (ctx) {
 
-      //window.showInformationMessage('disableStyle:: ' + disableStyle);
+  const cssDirectory = path.join(ctx.extensionPath, 'style');
+  const appliedCssFile = path.join(cssDirectory, 'p-captions.css');
+  const cachedCssFile = path.join(cssDirectory, '_p-captions.css');
 
-      if (disableStyle) {
-        fs.writeFileSync(appliedCssFile, '');
-      } else {
-        fs.writeFileSync(appliedCssFile, fs.readFileSync(cachedCssFile, 'utf8').toString());
-      }
-      commands.executeCommand('workbench.action.reloadWindow')
+  let exOption = buildCaptionOptions();
+  let disableStyle = getExtensionConfig().get('disableStyle', false);
+  applyStyleSetting(disableStyle, cssDirectory, appliedCssFile, cachedCssFile);
+
+  const configListener = workspace.onDidChangeConfiguration(event => {
+    if (!event.affectsConfiguration(CONFIG_SECTION)) {
+      return;
     }
-
+    exOption = buildCaptionOptions();
+    const nextDisableStyle = getExtensionConfig().get('disableStyle', false);
+    if (nextDisableStyle !== disableStyle) {
+      disableStyle = nextDisableStyle;
+      applyStyleSetting(disableStyle, cssDirectory, appliedCssFile, cachedCssFile);
+    }
+    commands.executeCommand('workbench.action.reloadWindow');
   });
+  ctx.subscriptions.push(configListener);
 
   return {
     extendMarkdownIt(md) {
-      return md.use(captions, {
-        dquoteFilename: exOption.dquoteFilename,
-        strongFilename: exOption.strongFilename,
-        jointSpaceUseHalfWidth: exOption.jointSpaceUseHalfWidth,
-        removeUnnumberedLabel: exOption.removeUnnumberedLabel,
-      });
+      return md.use(captions, exOption)
     }
-  };
+  }
 }
 
-exports.activate = activate;
+export function deactivate () {}

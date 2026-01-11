@@ -1,8 +1,7 @@
 # vsce-p7d-markdown-it-p-captions
 
-Warning. Version 0.5 may be different in usability than in the past use.
-
 For a paragraph, it determines if it is a caption from the string at the beginning of the paragraph and adds a class attribute value to indicate that it is a caption.
+Caption detection uses the built-in English/Japanese label sets from p7d-markdown-it-p-captions.
 
 You write the following Markdown.
 
@@ -19,7 +18,7 @@ In VS Code's built-in markdown preview, the value of the class attribute is adde
 <p><img alt="" src="fig1.jpg"></p>
 ```
 
-However, by default, labels without sequence numbers are removed on output. So you can't see that label in the preview either.
+However, by default, labels without sequence numbers are removed on output (blockquote labels are kept by default; see `removeUnnumberedLabelExceptMarks`). So you can't see that label in the preview either.
 
 Specifically, the following markdown is converted to the following HTML (by default):
 
@@ -36,7 +35,7 @@ Figure. A caption.
 
 Also, by default, full-width spaces used as label joints are converted to half-width spaces on output. Therefore, even on the preview, it can be seen as a half-width space.
 
-Also, This extension also comes with simple CSS for the given class attribute. So in the preview it looks like this:
+Also, this extension comes with simple CSS for the given class attribute, so in the preview it looks like this. If you change `classPrefix` or enable `removeMarkNameInCaptionClass`, the bundled CSS no longer matches and you should provide your own styles.
 
 Figure 1. Visual Studio Code with this extension installed.
 
@@ -58,14 +57,20 @@ Table. The first word that determines the caption line and the class attribute o
 
 | class attribute value | Character string at the beginning of a paragraph (uppercase or lowercase) |
 | ---- | ---- |
-| `caption-img` | fig, figure, illust, photo, 図, イラスト, 写真 |
+| `caption-img` | fig, figure, illust, photo, 図, 画像, イラスト, 写真 |
 | `caption-video` | movie, video, 動画, ビデオ |
 | `caption-table` | table, 表 |
-| `caption-pre-code` | code, codeblock, program, algorithm, コード, ソースコード, リスト, 命令, プログラム, 算譜, アルゴリズム, 算法 |
-| `caption-pre-samp` | console, terminal, prompt, command, 端末, ターミナル, コマンド, コマンドプロンプト, プロンプト |
-| `caption-blockquote` | source, quote, blockquote, 引用, 引用元, 出典 |
+| `caption-pre-code` | code, source code[^table-note1], code block[^table-note1], program, コード, ソースコード, リスト, プログラム, 算譜 |
+| `caption-pre-samp` | terminal, command, command prompt[^table-note1], prompt, 端末, ターミナル, コマンド, コマンドプロンプト, プロンプト |
+| `caption-blockquote` | source, cited, citation, quote, block quote[^table-note1], 引用, 引用元, 出典 |
+| `caption-slide` | slide, スライド, 発表資料 |
+| `caption-audio` | audio, sound, 音, 音声, 音楽, サウンド |
 
-In addition, a delimiter is required after these strings, and then one space is needed. If the character string is Japanese, half-width spaces only are allowed.
+[^table-note1]: These labels allow a space between words. For example, "source code", "code block", "command prompt", "block quote".
+
+Note. In this extension, "リスト" is treated as `caption-pre-code` and "図" is treated as `caption-img` (the upstream plugin can map them differently when integrated with p7d-markdown-it-figure-with-p-caption).
+
+Additionally, a delimiter is required after these strings (`[.:．。：　]`). For half-width (ASCII) labels, a space is required after `.` or `:`. Japanese labels can use full-width punctuation or a full-width space; a half-width space is also accepted.
 
 ```md
 Fig. A caption
@@ -82,6 +87,8 @@ Fig: A caption
 
 図 キャプション
 ```
+
+Notice. Even if the label is in English, if the caption body does not start with `[0-9a-zA-Z]`, delimiters are not necessary and only a half-width space is required to convert the caption. ex. `Figure 猫`
 
 You can also put a serial number, such as 0-9A-Z.-, between the first term and the separator.
 
@@ -113,6 +120,8 @@ Figure.1 A caption.
 
 ## Option
 
+Language detection is fixed to English/Japanese (plugin default) in this extension.
+
 `p7dMarkdownItPCaptions.disableStyle`
 :   Disable CSS of p7d-markdown-it-p-captions.
 
@@ -128,9 +137,36 @@ Figure.1 A caption.
 `p7dMarkdownItPCaptions.notConvertLabelJointFullWidthSpace`
 :   Not convert full-width space of label joint display to half-width space.
 
+`p7dMarkdownItPCaptions.classPrefix`
+:   Prefix for caption class names. Default: empty (uses "caption"). Changing this requires custom CSS.
+
+`p7dMarkdownItPCaptions.hasNumClass`
+:   Add label-has-num class when a caption label contains a number.
+
+`p7dMarkdownItPCaptions.bLabel`
+:   Use a b element for caption labels.
+
+`p7dMarkdownItPCaptions.strongLabel`
+:   Use a strong element for caption labels.
+
+`p7dMarkdownItPCaptions.labelPrefixMarker`
+:   Allow marker(s) before the label. Comma-separated; only the first two are used (example: `▼,▲`).
+
+`p7dMarkdownItPCaptions.removeUnnumberedLabelExceptMarks`
+:   Comma-separated marks to keep unnumbered labels for when displayUnnumberedLabel is false. Default keeps blockquote; add no-blockquote (or unblockquote) to remove it.
+
+`p7dMarkdownItPCaptions.removeMarkNameInCaptionClass`
+:   Remove mark names from label/body span class names.
+
+`p7dMarkdownItPCaptions.wrapCaptionBody`
+:   Wrap caption body text in a span element (`caption-<mark>-body`, or `caption-body` when `removeMarkNameInCaptionClass` is true).
+
+`p7dMarkdownItPCaptions.setFigureNumber`
+:   Automatically number figure and table captions without explicit numbers. Counters reset per Markdown render.
+
 ## Example
 
-Firgure is a
+Examples (default settings):
 
 ```
 Figure

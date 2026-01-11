@@ -2,14 +2,15 @@
   "name": "p7d-markdown-it-p-captions",
   "displayName": "p7d-markdown-it-p-captions",
   "description": "adds p[class|=caption] in markdown preview html.",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "publisher": "peaceroad",
   "license": "MIT",
+  "type": "module",
   "repository": {
     "url": "https://github.com/peaceroad/vsce-p7d-markdown-it-p-captions.git"
   },
   "engines": {
-    "vscode": "^1.57.0"
+    "vscode": "^1.80.0"
   },
   "categories": [
     "Other"
@@ -19,6 +20,9 @@
     "untrustedWorkspaces": {
       "supported": true
     }
+  },
+  "scripts": {
+    "build": "node build.js"
   },
   "activationEvents": [],
   "contributes": {
@@ -54,12 +58,60 @@
           "type": "boolean",
           "default": false,
           "description": "Not convert full-width space of label joint display to half-width space."
+        },
+        "p7dMarkdownItPCaptions.classPrefix": {
+          "type": "string",
+          "default": "",
+          "description": "Prefix for caption class names. Leave empty to use the default."
+        },
+        "p7dMarkdownItPCaptions.hasNumClass": {
+          "type": "boolean",
+          "default": false,
+          "description": "Add label-has-num class when a caption label contains a number."
+        },
+        "p7dMarkdownItPCaptions.bLabel": {
+          "type": "boolean",
+          "default": false,
+          "description": "Use a b element for caption labels."
+        },
+        "p7dMarkdownItPCaptions.strongLabel": {
+          "type": "boolean",
+          "default": false,
+          "description": "Use a strong element for caption labels."
+        },
+        "p7dMarkdownItPCaptions.labelPrefixMarker": {
+          "type": "string",
+          "default": "",
+          "description": "Allow marker(s) before the label. Use a comma-separated list."
+        },
+        "p7dMarkdownItPCaptions.removeUnnumberedLabelExceptMarks": {
+          "type": "string",
+          "default": "",
+          "description": "Comma-separated marks to keep unnumbered labels for. Default keeps blockquote; add no-blockquote (or unblockquote) to remove it."
+        },
+        "p7dMarkdownItPCaptions.removeMarkNameInCaptionClass": {
+          "type": "boolean",
+          "default": false,
+          "description": "Remove mark names from label/body span class names."
+        },
+        "p7dMarkdownItPCaptions.wrapCaptionBody": {
+          "type": "boolean",
+          "default": false,
+          "description": "Wrap caption body text in a span element."
+        },
+        "p7dMarkdownItPCaptions.setFigureNumber": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically number figure and table captions without explicit numbers."
         }
       }
     }
   },
-  "main": "./extension.js",
+  "main": "./dist/extension.js",
   "dependencies": {
-    "p7d-markdown-it-p-captions": "^0.9.1"
+    "p7d-markdown-it-p-captions": "^0.20.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.27.2"
   }
 }

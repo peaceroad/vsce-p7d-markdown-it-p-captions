@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.6.0 2026/01/11
+
+Bump updates by p7d-markdown-it-p-captions@0.20.1. Probably... the basic operation hasn't changed.
+
+- From 0.5.1: caption detection keywords/types were updated to match the upstream plugin (slide/audio added; label lists revised), and unnumbered blockquote labels are kept by default when unnumbered labels are hidden.
+- Caption handling options are now exposed (label prefix markers, filename markers, label tags, label-number class, body wrapping, mark-name stripping, auto numbering).
+- Fix: treat dot-numbered (Figure.1 type) labels as numbered and cache mark regex entries
+- Caption detection performance improved by caching mark regex entries in p7d-markdown-it-p-captions.
+- README updated to match the current caption label list, delimiter rules, and available options.
+
 ## 0.5.1 2023/04/09
 
 - Add `source` for blockquote caption string.
